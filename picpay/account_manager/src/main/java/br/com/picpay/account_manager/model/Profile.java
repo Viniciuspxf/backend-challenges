@@ -18,7 +18,7 @@ public class Profile {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private String cpf;
 
     @Column(nullable = false, unique = true)
@@ -28,7 +28,7 @@ public class Profile {
     private String password;
 
     @Column(nullable = false)
-    private Boolean isShopKeeper;
+    private boolean isShopKeeper;
 
     @Column(nullable = false)
     private BigDecimal balance;
