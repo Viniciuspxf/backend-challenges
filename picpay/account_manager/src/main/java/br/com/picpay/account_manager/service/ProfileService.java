@@ -52,4 +52,19 @@ public class ProfileService {
         profileRepository.deleteById(id);
     }
 
+    public void increaseAmount(Long payee, BigDecimal value) {
+        Profile profile = profileRepository.findById(payee);
+        profile.setBalance(profile.getBalance().add(value));
+        profileRepository.save(profile);
+    }
+
+    public void decreaseAmount(Long payer, BigDecimal value) {
+        Profile profile = profileRepository.findById(payer);
+
+        if (profile.getBalance().compareTo(value) < 0)
+            throw new RuntimeException("Saldo insuficiente");
+
+        profile.setBalance(profile.getBalance().subtract(value));
+        profileRepository.save(profile);
+    }
 }

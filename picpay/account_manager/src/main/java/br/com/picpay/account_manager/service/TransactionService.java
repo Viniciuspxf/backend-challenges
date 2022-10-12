@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 @Service
 public class TransactionService {
     ProfileService profileService;
@@ -20,9 +22,10 @@ public class TransactionService {
         AuthorizationResponseDTO response = restTemplate.postForEntity("https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6",
                transaction, AuthorizationResponseDTO.class).getBody();
 
-        if (response.getMessage() == "Autorizado") {
-
+        if (Objects.equals(response.getMessage(), "Autorizado")) {
+            profileService.decreaseAmount(transaction.getPayer(),transaction.getValue());
+            profileService.increaseAmount(transaction.getPayee(), transaction.getValue());
         }
-        else throw new RuntimeException();
+        else throw new RuntimeException("Não autorizado");
     }
 }
