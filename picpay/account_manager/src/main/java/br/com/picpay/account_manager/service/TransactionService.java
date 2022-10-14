@@ -2,13 +2,14 @@ package br.com.picpay.account_manager.service;
 
 import br.com.picpay.account_manager.exception.InvalidTransactionException;
 import br.com.picpay.account_manager.exception.RequestFailedException;
-import br.com.picpay.account_manager.model.dto.AuthorizationResponseDTO;
-import br.com.picpay.account_manager.model.dto.TransactionDTO;
+import br.com.picpay.account_manager.model.Profile;
+import br.com.picpay.account_manager.model.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TransactionService {
@@ -38,5 +39,33 @@ public class TransactionService {
             profileService.increaseAmount(transaction.getPayee(), transaction.getValue());
         }
         else throw new InvalidTransactionException("Não autorizado");
+
+        CompletableFuture.runAsync(()-> sendTransactionMessage(transaction));
+    }
+
+    public void sendTransactionMessage(TransactionDTO transaction) {
+        ResponseProfileDTO payer = profileService.getProfile(transaction.getPayer());
+        ResponseProfileDTO payee = profileService.getProfile(transaction.getPayee());
+        EmailServiceRequestDTO request = new EmailServiceRequestDTO(payee.getEmail(),
+                "Você recebeu R$" + transaction.getValue() + " do " + payer.getName());
+
+
+        EmailServiceResponseDTO response;
+        try {
+            response = restTemplate.postForEntity("http://o4d9z.mocklab.io/notify",
+                    request, EmailServiceResponseDTO.class,
+                    EmailServiceResponseDTO.class).getBody();
+
+            if (!response.getMessage().equals("Success"))
+                throw new RuntimeException("Serviço externo não conseguiu enviar a mensagem");
+            System.out.println("Mensagem enviada com sucesso");
+        } catch (Exception e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+            sendTransactionMessage(transaction);
+        }
     }
 }
