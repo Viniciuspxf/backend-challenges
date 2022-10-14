@@ -67,4 +67,9 @@ public class ProfileService {
         profile.setBalance(profile.getBalance().subtract(value));
         profileRepository.save(profile);
     }
+
+    public boolean isAbleToTransferMoney(Long profileId) {
+        Profile profile = profileRepository.findById(profileId);
+        return !profile.isShopKeeper();
+    }
 }
