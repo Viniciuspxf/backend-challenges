@@ -26,7 +26,7 @@ public class ProfileService {
     }
 
     public ResponseProfileDTO getProfile(Long id) {
-        Profile profile = profileRepository.findById(id).orElseThrow( () ->new RequestFailedException("Perfil não criado"));;
+        Profile profile = profileRepository.findById(id).orElseThrow( () ->new NotFoundException("Perfil não emcontrado"));;
         ResponseProfileDTO  responseProfileDTO = profileMapper.toResponseProfileDTO(profile);
         return responseProfileDTO;
     }
