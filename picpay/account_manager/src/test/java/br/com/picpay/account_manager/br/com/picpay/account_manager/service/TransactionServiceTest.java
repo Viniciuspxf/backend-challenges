@@ -1,12 +1,11 @@
 package br.com.picpay.account_manager.br.com.picpay.account_manager.service;
 
 import br.com.picpay.account_manager.exception.InvalidTransactionException;
-import br.com.picpay.account_manager.mapper.ProfileMapper;
 import br.com.picpay.account_manager.model.Profile;
-import br.com.picpay.account_manager.model.dto.AuthorizationResponseDTO;
 import br.com.picpay.account_manager.model.dto.TransactionDTO;
 import br.com.picpay.account_manager.repository.ProfileRepository;
-import br.com.picpay.account_manager.service.ProfileService;
+import br.com.picpay.account_manager.service.AuthorizationService;
+import br.com.picpay.account_manager.service.MessagesService;
 import br.com.picpay.account_manager.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,22 +13,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class TransactionServiceTest {
     @Mock
-    private ProfileService profileService;
+    private MessagesService messagesService;
 
     @Mock
-    RestTemplate restTemplate;
+    private ProfileRepository profileRepository;
+
+    @Mock
+    private AuthorizationService authorizationService;
+
+    private TransactionDTO transaction;
 
     @InjectMocks
     TransactionService transactionService;
@@ -37,35 +37,37 @@ public class TransactionServiceTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        transaction = new TransactionDTO();
+        transaction.setPayer(1L);
+        transaction.setPayee(2L);
     }
 
     @Test
     public void shouldThrowInvalidTransactionError() {
-        when(profileService.isAbleToTransferMoney(Mockito.any())).thenReturn(false);
-        TransactionDTO transaction = new TransactionDTO();
-        transaction.setPayer(1L);
+        Profile profile = mock(Profile.class);
+        when(profile.isAbleToTransferMoney()).thenReturn(false);
+        Optional<Profile> optionalProfile = Optional.of(profile);
+
+        when(profileRepository.findById(1L)).thenReturn(optionalProfile);
+        when(profileRepository.findById(2L)).thenReturn(Optional.of(new Profile()));
 
         assertThrows(InvalidTransactionException.class, ()->transactionService.makeTransaction(transaction));
-        verifyNoInteractions(restTemplate);
-        verify(profileService).isAbleToTransferMoney(1L);
-        verifyNoMoreInteractions(profileService);
+        verifyNoInteractions(authorizationService);
+        verify(profile).isAbleToTransferMoney();
     }
 
     @Test
     public void shouldThrowNotAuthorizedError() {
-        when(profileService.isAbleToTransferMoney(Mockito.any())).thenReturn(true);
-        TransactionDTO transaction = new TransactionDTO();
-        transaction.setPayer(1L);
+        Profile profile = mock(Profile.class);
+        when(profile.isAbleToTransferMoney()).thenReturn(true);
+        Optional<Profile> optionalProfile = Optional.of(profile);
 
-        AuthorizationResponseDTO authorizationResponse = new AuthorizationResponseDTO();
-        authorizationResponse.setMessage("Não autorizado");
-        ResponseEntity<AuthorizationResponseDTO> responseEntity = ResponseEntity.badRequest().body(authorizationResponse);
+        when(profileRepository.findById(1L)).thenReturn(optionalProfile);
+        when(profileRepository.findById(2L)).thenReturn(Optional.of(new Profile()));
 
-        when(restTemplate.postForEntity(Mockito.anyString(), Mockito.any(),  eq(AuthorizationResponseDTO.class)))
-                .thenReturn(responseEntity);
+        when(profile.isAbleToTransferMoney()).thenReturn(true);
+        when(authorizationService.isAuthorized(Mockito.any())).thenReturn(false);
         assertThrows(InvalidTransactionException.class, ()->transactionService.makeTransaction(transaction));
-        verify(profileService).isAbleToTransferMoney(1L);
-        verifyNoMoreInteractions(profileService);
     }
 
 

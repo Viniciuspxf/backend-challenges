@@ -18,14 +18,12 @@ import java.util.concurrent.CompletableFuture;
 public class TransactionService {
     private final MessagesService messagesService;
     private final ProfileRepository profileRepository;
-    private final RestTemplate restTemplate;
     private final AuthorizationService authorizationService;
 
     @Autowired
-    TransactionService(ProfileRepository profileRepository, RestTemplate restTemplate,
-                       AuthorizationService authorizationService, MessagesService messagesService) {
+    TransactionService(ProfileRepository profileRepository, AuthorizationService authorizationService,
+                       MessagesService messagesService) {
         this.profileRepository = profileRepository;
-        this.restTemplate = restTemplate;
         this.authorizationService = authorizationService;
         this.messagesService = messagesService;
     }
