@@ -53,25 +53,4 @@ public class ProfileService {
     public void deleteProfile(Long id) {
         profileRepository.deleteById(id);
     }
-
-    public void increaseAmount(Long payee, BigDecimal value) {
-        Profile profile = profileRepository.findById(payee).orElseThrow( () ->new NotFoundException("Perfil não encontrado"));
-        profile.setBalance(profile.getBalance().add(value));
-        profileRepository.save(profile);
-    }
-
-    public void decreaseAmount(Long payer, BigDecimal value) {
-        Profile profile = profileRepository.findById(payer).orElseThrow( () ->new NotFoundException("Perfil não encontrado"));;
-
-        if (profile.getBalance().compareTo(value) < 0)
-            throw new InvalidTransactionException("Saldo insuficiente");
-
-        profile.setBalance(profile.getBalance().subtract(value));
-        profileRepository.save(profile);
-    }
-
-    public boolean isAbleToTransferMoney(Long profileId) {
-        Profile profile = profileRepository.findById(profileId).orElseThrow( () ->new NotFoundException("Perfil não encontrado"));
-        return !profile.isShopKeeper();
-    }
 }
