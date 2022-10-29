@@ -3,9 +3,9 @@ spring:
     pathmatch:
       matching-strategy: "ANT_PATH_MATCHER"
   datasource:
-      url: jdbc:postgresql://localhost:5432/
-      username: user
-      password: password
+      url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/}
+      username: ${POSTGRES_USER:user}
+      password: ${POSTGRES_PASSWORD:password}
   jpa:
     hibernate:
       ddl-auto: update
