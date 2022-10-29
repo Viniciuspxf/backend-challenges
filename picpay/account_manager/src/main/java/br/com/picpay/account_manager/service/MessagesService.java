@@ -4,7 +4,6 @@ import br.com.picpay.account_manager.exception.NotFoundException;
 import br.com.picpay.account_manager.model.Profile;
 import br.com.picpay.account_manager.model.dto.EmailServiceRequestDTO;
 import br.com.picpay.account_manager.model.dto.EmailServiceResponseDTO;
-import br.com.picpay.account_manager.model.dto.ResponseProfileDTO;
 import br.com.picpay.account_manager.model.dto.TransactionDTO;
 import br.com.picpay.account_manager.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
