@@ -19,12 +19,12 @@ public class TransactionController {
     }
 
     @GetMapping
-    private ResponseEntity getTransaction() {
+    private ResponseEntity<String> getTransaction() {
         return ResponseEntity.ok("Transaction");
     }
 
     @PostMapping
-    private ResponseEntity makeTransaction(@RequestBody TransactionDTO request) {
+    private ResponseEntity<String> makeTransaction(@RequestBody TransactionDTO request) {
         transactionService.makeTransaction(request);
         return ResponseEntity.ok().build();
     }
