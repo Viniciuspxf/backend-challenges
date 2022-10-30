@@ -2,10 +2,8 @@ package br.com.picpay.account_manager.controller;
 
 import br.com.picpay.account_manager.model.dto.CreateProfileDTO;
 import br.com.picpay.account_manager.model.dto.ResponseProfileDTO;
-import br.com.picpay.account_manager.model.dto.TransactionDTO;
 import br.com.picpay.account_manager.model.dto.UpdateProfileDTO;
 import br.com.picpay.account_manager.service.ProfileService;
-import br.com.picpay.account_manager.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

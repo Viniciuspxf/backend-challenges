@@ -1,7 +1,6 @@
 package br.com.picpay.account_manager.model;
 
 import br.com.picpay.account_manager.exception.InvalidTransactionException;
-import br.com.picpay.account_manager.exception.NotFoundException;
 import lombok.Getter;
 import lombok.Setter;
 

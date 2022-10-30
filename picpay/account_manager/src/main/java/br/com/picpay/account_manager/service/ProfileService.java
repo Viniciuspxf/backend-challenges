@@ -1,6 +1,5 @@
 package br.com.picpay.account_manager.service;
 
-import br.com.picpay.account_manager.exception.InvalidTransactionException;
 import br.com.picpay.account_manager.exception.NotFoundException;
 import br.com.picpay.account_manager.exception.RequestFailedException;
 import br.com.picpay.account_manager.mapper.ProfileMapper;
@@ -11,8 +10,6 @@ import br.com.picpay.account_manager.model.dto.UpdateProfileDTO;
 import br.com.picpay.account_manager.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 public class ProfileService {
