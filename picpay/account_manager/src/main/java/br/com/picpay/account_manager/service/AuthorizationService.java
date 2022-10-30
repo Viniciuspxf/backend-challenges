@@ -19,16 +19,17 @@ public class AuthorizationService {
         this.restTemplate = restTemplate;
     }
     public boolean isAuthorized(TransactionDTO transaction) {
-        AuthorizationResponseDTO response;
-        
         try {
-            response = restTemplate.postForEntity(URL,
-                    transaction, AuthorizationResponseDTO.class).getBody();
+            final AuthorizationResponseDTO response = restTemplate.postForEntity(URL,
+                transaction, AuthorizationResponseDTO.class).getBody();
+            if (response != null) {
+                return Objects.equals(response.getMessage(), "Autorizado");
+            } else {
+                return false;
+            }
         }
         catch (Exception e) {
             throw new RequestFailedException("Não foi possível validar a transação.");
         }
-
-        return Objects.equals(response.getMessage(), "Autorizado");
     }
 }
