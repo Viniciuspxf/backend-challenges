@@ -21,25 +21,25 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity getProfile(@PathVariable Long id) {
+    private ResponseEntity<ResponseProfileDTO> getProfile(@PathVariable Long id) {
         ResponseProfileDTO response = profileService.getProfile(id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    private ResponseEntity createProfile(@RequestBody CreateProfileDTO request) {
+    private ResponseEntity<ResponseProfileDTO> createProfile(@RequestBody CreateProfileDTO request) {
         ResponseProfileDTO response = profileService.createProfile(request);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity updateProfile(@PathVariable Long id, @RequestBody UpdateProfileDTO request) {
+    private ResponseEntity<ResponseProfileDTO> updateProfile(@PathVariable Long id, @RequestBody UpdateProfileDTO request) {
         ResponseProfileDTO response = profileService.updateProfile(id, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity deleteProfile(@PathVariable Long id) {
+    private ResponseEntity<String> deleteProfile(@PathVariable Long id) {
         profileService.deleteProfile(id);
         return ResponseEntity.ok().build();
     }
