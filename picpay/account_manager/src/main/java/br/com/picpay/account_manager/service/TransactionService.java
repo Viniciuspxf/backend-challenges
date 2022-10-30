@@ -2,16 +2,13 @@ package br.com.picpay.account_manager.service;
 
 import br.com.picpay.account_manager.exception.InvalidTransactionException;
 import br.com.picpay.account_manager.exception.NotFoundException;
-import br.com.picpay.account_manager.exception.RequestFailedException;
 import br.com.picpay.account_manager.model.Profile;
 import br.com.picpay.account_manager.model.dto.*;
 import br.com.picpay.account_manager.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @Service
