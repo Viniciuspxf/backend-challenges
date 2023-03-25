@@ -1,12 +1,9 @@
-package br.com.picpay.account_manager.br.com.picpay.account_manager.service;
+package br.com.picpay.account_manager.service;
 
 import br.com.picpay.account_manager.exception.InvalidTransactionException;
 import br.com.picpay.account_manager.model.Profile;
 import br.com.picpay.account_manager.model.dto.TransactionDTO;
 import br.com.picpay.account_manager.repository.ProfileRepository;
-import br.com.picpay.account_manager.service.AuthorizationService;
-import br.com.picpay.account_manager.service.MessagesService;
-import br.com.picpay.account_manager.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

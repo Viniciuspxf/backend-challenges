@@ -35,23 +35,17 @@ public class Profile {
     private BigDecimal balance;
 
     public void increaseAmount(BigDecimal value) {
-//        Profile profile = profileRepository.findById(payee).orElseThrow( () ->new NotFoundException("Perfil não encontrado"));
         this.setBalance(this.getBalance().add(value));
-//        profileRepository.save(profile);
     }
 
     public void decreaseAmount(BigDecimal value) {
-//        Profile profile = profileRepository.findById(payer).orElseThrow( );;
-
         if (this.getBalance().compareTo(value) < 0)
             throw new InvalidTransactionException("Saldo insuficiente");
 
         this.setBalance(this.getBalance().subtract(value));
-//        profileRepository.save(profile);
     }
 
     public boolean isAbleToTransferMoney() {
-//        Profile profile = profileRepository.findById(profileId).orElseThrow( () ->new NotFoundException("Perfil não encontrado"));
         return !this.isShopKeeper();
     }
 }
